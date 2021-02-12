@@ -1,7 +1,7 @@
 form {
     width: 600px;
     margin: 200px auto; 
-    border: dotted #797979;      
+    border: solid black;      
 }
 
 div {
@@ -17,10 +17,9 @@ label {
 }
 
 input {
-
     width: 50%;
     display: block;
-    border: 1px solid #797979;
+    border: 1px solid #808080;
     font-size: 20px;
     border-radius: 5px;
 }
@@ -38,7 +37,7 @@ button {
     font-size: 20px;
     font-weight: bold;
     color: whitesmoke;
-    background: linear-gradient(90deg, rgb(119, 112, 16), rgb(65, 57, 1));
+    background: linear-gradient(90deg, rgb(37, 36, 41), rgb(126, 125, 119));
 }
 span {
     display: block;

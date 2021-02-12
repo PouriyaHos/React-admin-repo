@@ -4,7 +4,7 @@ var sortBy = _.sortBy;
 var cx = window.classNames;
 
 const Icon = ({
-  icon }) => 
+  icon }) =>
 
 React.createElement("span", { className: `fa fa-${icon}` });
 
@@ -14,14 +14,13 @@ const TableRow = ({
 {
   return (
     React.createElement("tr", null,
-    Object.keys(row).map(key => {
-      const td = row[key];
-      return (
-        React.createElement("td", null, td));
-
-    })));
-
-
+      Object.keys(row).map(key => {
+        const td = row[key];
+        return (
+          React.createElement("td", null, td));
+      })
+    )
+  );
 };
 
 const TableHeader = ({
@@ -30,7 +29,7 @@ const TableHeader = ({
   sortAsc,
   onTableHeaderClick }) =>
 {
-  return(
+  return (
     React.createElement("thead", null,
     columns.map(({ name, key }) => {
       const isActive = sortColumn === key;
@@ -40,16 +39,21 @@ const TableHeader = ({
 
 
       const icon = isActive ? 
-      React.createElement("span", { style: { fontSize: 8 }, children: sortAsc ? '▲' : '▼' }) :
+      React.createElement("span", { 
+        style: { fontSize: 8 }, 
+        children: sortAsc ? '▲' : '▼' }) :
       null;
 
       return (
-        React.createElement("th", { className: classes, key: key, onClick: e => onTableHeaderClick(key) },
+        React.createElement(
+          "th", { 
+            className: classes, 
+            key: key, 
+            onClick: e => onTableHeaderClick(key) 
+          },
         name,
-        icon && ' ' ,
+        icon && ' ',
         icon));
-
-
     })));
 
 
@@ -60,11 +64,14 @@ const TableBody = ({
 {
   return (
     React.createElement("tbody", null,
-    data.map((row, i) => 
-    React.createElement(TableRow, { row: row, key: i }))));
-
-
-
+    data.map((row, i) =>
+    React.createElement(
+      TableRow, { 
+        row: row, 
+        key: i 
+      })
+    )
+  ));
 };
 
 class Table extends Component {
@@ -92,7 +99,6 @@ class Table extends Component {
     this.setState({
       sortAsc: true,
       sortColumn: key });
-
   }
 
   render() {
@@ -108,7 +114,9 @@ class Table extends Component {
     let sortedData = data;
 
     if (sortColumn) {
-      sortedData = sortBy(sortedData, row => row[sortColumn]);
+      sortedData = sortBy(sortedData, 
+        row => row[sortColumn]
+      );
     }
 
     if (!sortAsc) {
@@ -121,15 +129,12 @@ class Table extends Component {
         sortAsc: sortAsc,
         sortColumn: sortColumn,
         columns: columns,
-        onTableHeaderClick: this.handleTableHeaderClick }), 
+        onTableHeaderClick: this.handleTableHeaderClick }),
 
       React.createElement(TableBody, {
-        data: sortedData })));
-
-
-
-  }}
-;
+        data: sortedData })
+    ));
+  }};
 
 Table.propTypes = {
   isLoading: PropTypes.bool,
@@ -174,7 +179,7 @@ class FilterTextField extends Component {
 
       React.createElement("input", {
         type: "search",
-        placeholder: "Search byname,user,email",
+        placeholder: "Search by title",
         onChange: this.handleTextChange })));
   }}
 
@@ -189,16 +194,16 @@ class FilterTextField extends Component {
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
   componentDidMount() {
-    window.fetch('https://jsonplaceholder.typicode.com/users').
+    window.fetch('https://jsonplaceholder.typicode.com/todos').
     then(res => res.json()).
     then(data => {
       console.log(data);
       this.setState({
-        data: data.map(user => ({
-          id: user.id,
-          name: user.name,
-          username: user.username, 
-          email: user.email
+        data: data.map(todos => ({
+          id: todos.id,
+          userId: todos.userId,
+          title: todos.title, 
+          completed: todos.completed
         })) 
       });
     })
@@ -216,37 +221,43 @@ class FilterTextField extends Component {
 
     const columns = [
     {
-      name: 'USER ID',
+      name: 'ID',
       key: 'id' },
 
     {
-      name: 'Name',
-      key: 'name' },
+      name: 'User ID',
+      key: 'userId' },
 
     {
-      name: 'Username',
-      key: 'username' },
+      name: 'Todos title',
+      key: 'title' },
     {
-      name: 'Email',
-      key: 'email' }
+      name: 'completed/False',
+      key: 'completed' }
     ];
 
     return (
-      React.createElement("div", null,
-      React.createElement(FilterTextField, 
-        { onTextChange: this.handleSearchChange 
-        }),
+      React.createElement(
+        "div", 
+        null,
+      React.createElement(FilterTextField, { 
+        onTextChange: this.handleSearchChange 
+      }),
+
       React.createElement(Table, {
         data: data.filter(
-          (row) => row.name.toLowerCase().indexOf(searchTerm) !== -1
+        (row) => (row.id + "").toLowerCase().indexOf(searchTerm) !== -1
         ),
         data: data.filter(
-          (row) => row.username.toLowerCase().indexOf(searchTerm) !== -1
+          (row) => (row.userId + "").toLowerCase().indexOf(searchTerm) !== -1
         ),
         data: data.filter(
-          (row) => row.email.toLowerCase().indexOf(searchTerm) !== -1
+          (row) => (row.title + "").toLowerCase().indexOf(searchTerm) !== -1
         ),
-        columns: columns })));
+        columns: columns 
+      })
+      
+    ));
   }
 }
 
